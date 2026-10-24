@@ -29,5 +29,7 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
+    private boolean enabled = true;
+
 
 }
