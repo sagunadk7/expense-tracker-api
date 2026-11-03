@@ -18,6 +18,7 @@ public class UserController {
 
     @PostMapping("/register")
     public User register(@RequestBody UserRegistrationDto dto){
+        System.out.println("This ran ");
         return service.register(dto);
     }
 

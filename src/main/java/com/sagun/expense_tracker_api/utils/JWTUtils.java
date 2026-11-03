@@ -3,6 +3,7 @@ package com.sagun.expense_tracker_api.utils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -18,7 +19,7 @@ public class JWTUtils {
     private  int EXPIRATION_TIME = 1000*60*60;
     @Value("${JJWT_SECRET_KEY}")
     private  String SECRET;
-    private SecretKey key = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
+    private SecretKey key;
 
     public String generateJwtToken(String email){
         return Jwts.builder()
@@ -49,6 +50,10 @@ public class JWTUtils {
         return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
+    @PostConstruct
+    public void init(){
+        this.key  = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
+    }
 
 }
 

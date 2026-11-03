@@ -28,8 +28,9 @@ public class User extends BaseEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Set<Role> roles;
+    private Set<Role> roles = Set.of(Role.USER);
 
+    @Column(nullable = false)
     private boolean enabled = true;
 
 
