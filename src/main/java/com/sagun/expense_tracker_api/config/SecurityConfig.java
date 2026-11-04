@@ -27,7 +27,6 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http){
-        System.out.println("Filter chain ran ");
         return http
             .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth-> auth.requestMatchers("/api/v1/auth/register").permitAll())

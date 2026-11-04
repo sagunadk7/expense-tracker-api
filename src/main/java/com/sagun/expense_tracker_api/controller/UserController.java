@@ -1,6 +1,7 @@
 package com.sagun.expense_tracker_api.controller;
 
-import com.sagun.expense_tracker_api.dto.UserRegistrationDto;
+import com.sagun.expense_tracker_api.dto.UserRegistrationRequestDto;
+import com.sagun.expense_tracker_api.dto.UserRegistrationResponseDto;
 import com.sagun.expense_tracker_api.entity.User;
 import com.sagun.expense_tracker_api.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,7 @@ public class UserController {
     private final UserService service;
 
     @PostMapping("/register")
-    public User register(@RequestBody UserRegistrationDto dto){
-        System.out.println("This ran ");
+    public UserRegistrationResponseDto register(@RequestBody UserRegistrationRequestDto dto){
         return service.register(dto);
     }
 
