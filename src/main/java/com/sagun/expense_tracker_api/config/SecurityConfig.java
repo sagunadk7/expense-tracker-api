@@ -29,7 +29,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http){
         return http
             .cors(Customizer.withDefaults())
-                .authorizeHttpRequests(auth-> auth.requestMatchers("/api/v1/auth/register").permitAll())
+                .authorizeHttpRequests(auth-> auth.requestMatchers("/api/v1/auth/register","/api/v1/auth/login").permitAll())
             .csrf(AbstractHttpConfigurer::disable)
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
             .build();

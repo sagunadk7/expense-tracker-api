@@ -16,17 +16,31 @@ import java.util.Date;
 public class JWTUtils {
 
 
-    private  int EXPIRATION_TIME = 1000*60*60;
+
+    private final long accessTokenExpiration = 900000;
+    private final long refreshTokenExpiration = 604800000;
     @Value("${JJWT_SECRET_KEY}")
     private  String SECRET;
     private SecretKey key;
 
-    public String generateJwtToken(String email){
+
+    public String generateRefreshToken(String email){
+        return generateToken(email, refreshTokenExpiration,"refresh");
+    }
+
+    public String generateAccessToken(String email){
+        return generateToken(email,accessTokenExpiration, "access");
+    }
+
+    private final String generateToken(String email, long expiration,String tokenType){
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + expiration);
         return Jwts.builder()
                 .subject(email)
+                .claim("type",tokenType)
                 .signWith(key)
-                .setIssuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis()+EXPIRATION_TIME))
+                .setIssuedAt(now)
+                .expiration(expiryDate)
                 .compact();
     }
 
