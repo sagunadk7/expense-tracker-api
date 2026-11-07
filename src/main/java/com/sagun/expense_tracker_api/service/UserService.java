@@ -74,6 +74,7 @@ public class UserService {
             return new UserPasswordChangeResponseDto(false,HttpStatus.BAD_REQUEST,"Choose a strong password");
         }
         user.setPasswordHash(encoder.encode(request.newPassword()));
+        repository.save(user);
         return new UserPasswordChangeResponseDto(true,HttpStatus.OK,"Password has been changed successfully");
     }
 
