@@ -1,11 +1,9 @@
 package com.sagun.expense_tracker_api.service;
 
 import com.sagun.expense_tracker_api.customExceptions.UserNotFoundException;
-import com.sagun.expense_tracker_api.dto.UserLoginRequestDto;
-import com.sagun.expense_tracker_api.dto.UserLoginResponseDto;
-import com.sagun.expense_tracker_api.dto.UserRegistrationRequestDto;
-import com.sagun.expense_tracker_api.dto.UserRegistrationResponseDto;
+import com.sagun.expense_tracker_api.dto.*;
 import com.sagun.expense_tracker_api.entity.User;
+import com.sagun.expense_tracker_api.principal.UserPrincipal;
 import com.sagun.expense_tracker_api.repository.UserRepository;
 import com.sagun.expense_tracker_api.utils.EmailAndPasswordValidator;
 import com.sagun.expense_tracker_api.utils.JWTUtils;
@@ -13,7 +11,9 @@ import com.sagun.expense_tracker_api.utils.ResponseCookieFactory;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -62,9 +62,21 @@ public class UserService {
         String refreshToken = jwtUtils.generateRefreshToken(user.getEmail());
         response.addHeader(HttpHeaders.SET_COOKIE, cookieFactory.create(refreshToken).toString());
         return UserLoginResponseDto.from(user,accessToken,"Bearer", Duration.ofMinutes(15).toSeconds());
-
-
-
     }
+
+    public UserPasswordChangeResponseDto changePassword(UserPasswordChangeRequestDto request, UserPrincipal principal){
+        User user = repository.findByEmail(principal.getEmail()).orElseThrow(() -> new UserNotFoundException("User does not exists"));
+        if(!user.isEnabled()) throw new DisabledException("Account is disabled");
+        if(!encoder.matches(request.currentPassword(),user.getPasswordHash())){
+            return new UserPasswordChangeResponseDto(false, HttpStatus.UNAUTHORIZED,"Invalid current password or expired authentication token");
+        }
+        if(!EmailAndPasswordValidator.isStrongPassword(request.newPassword())){
+            return new UserPasswordChangeResponseDto(false,HttpStatus.BAD_REQUEST,"Choose a strong password");
+        }
+        user.setPasswordHash(encoder.encode(request.newPassword()));
+        return new UserPasswordChangeResponseDto(true,HttpStatus.OK,"Password has been changed successfully");
+    }
+
+
 
 }

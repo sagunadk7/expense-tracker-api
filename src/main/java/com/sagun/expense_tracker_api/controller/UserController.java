@@ -1,18 +1,14 @@
 package com.sagun.expense_tracker_api.controller;
 
-import com.sagun.expense_tracker_api.dto.UserLoginRequestDto;
-import com.sagun.expense_tracker_api.dto.UserLoginResponseDto;
-import com.sagun.expense_tracker_api.dto.UserRegistrationRequestDto;
-import com.sagun.expense_tracker_api.dto.UserRegistrationResponseDto;
+import com.sagun.expense_tracker_api.dto.*;
 import com.sagun.expense_tracker_api.entity.User;
+import com.sagun.expense_tracker_api.principal.UserPrincipal;
 import com.sagun.expense_tracker_api.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -29,6 +25,11 @@ public class UserController {
     @PostMapping("/login")
     public UserLoginResponseDto login(@Valid @RequestBody UserLoginRequestDto dto, HttpServletResponse response){
         return service.login(dto, response);
+    }
+
+    @PostMapping("/change-password")
+    public UserPasswordChangeResponseDto changePassword(@AuthenticationPrincipal UserPrincipal principal, @RequestBody UserPasswordChangeRequestDto requestDto){
+        return service.changePassword(requestDto,principal);
     }
 
 }

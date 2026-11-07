@@ -1,5 +1,6 @@
 package com.sagun.expense_tracker_api.utils;
 
+import com.sagun.expense_tracker_api.principal.UserPrincipal;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -52,7 +53,7 @@ public class JWTUtils {
                 .getPayload();
     }
 
-    public String getUsername(String token){
+    public String getEmail(String token){
         return extractClaims(token).getSubject();
     }
 
@@ -60,8 +61,10 @@ public class JWTUtils {
         return extractClaims(token).getExpiration().before(new Date());
     }
 
-    public boolean isValidToken(String username, String token, UserDetails userDetails){
-        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+    public boolean isValidToken(String email, String token, UserPrincipal userDetails){
+        Claims claims = extractClaims(token);
+        String tokenType = claims.get("type", String.class);
+        return email.equals(userDetails.getEmail()) && "access".equals(tokenType) && !isTokenExpired(token);
     }
 
     @PostConstruct

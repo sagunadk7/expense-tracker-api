@@ -5,6 +5,7 @@ import com.sun.jdi.request.InvalidRequestStateException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -31,6 +32,11 @@ public class GlobalExceptionsHandler {
 
     @ExceptionHandler(InvalidRequestStateException.class)
     ProblemDetail invalid(InvalidRequestStateException exception){
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,exception.getMessage());
+    }
+
+    @ExceptionHandler(DisabledException.class)
+    ProblemDetail disabled(DisabledException exception){
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,exception.getMessage());
     }
 
