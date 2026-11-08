@@ -17,7 +17,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class User extends BaseEntity {
 
-    @Column(nullable = false, name = "full_name",length = 100)
+    @Column(nullable = false, name = "username",length = 100)
     private String username;
 
     @Column(nullable = false)
@@ -29,6 +29,9 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Set<Role> roles = Set.of(Role.USER);
+
+
+    private Long income;
 
     @Column(nullable = false)
     private boolean enabled = true;

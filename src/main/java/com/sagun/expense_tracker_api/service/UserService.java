@@ -12,8 +12,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -78,6 +78,15 @@ public class UserService {
         return new UserPasswordChangeResponseDto(true,HttpStatus.OK,"Password has been changed successfully");
     }
 
+    public ResponseEntity<String> setIncome(Long amount, UserPrincipal principal){
+        User user = repository.findByEmail(principal.getEmail()).orElseThrow(() -> new UserNotFoundException("User doesnot exist"));
+        if(!(amount >0)){
+            return ResponseEntity.badRequest().body("Invalid income");
+        }
+        user.setIncome(amount);
+        repository.save(user);
+        return ResponseEntity.ok().body("Income successfully set");
 
+    }
 
 }
