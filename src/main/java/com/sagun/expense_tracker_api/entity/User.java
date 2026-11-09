@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -36,5 +38,7 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private boolean enabled = true;
 
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<Expense> expenses = new ArrayList<>();
 
 }

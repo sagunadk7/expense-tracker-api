@@ -12,6 +12,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDate;
 
 @Entity
 @Setter
@@ -39,8 +40,13 @@ public class Expense extends BaseEntity{
     private BigDecimal amount;
 
     @NotNull
-    @Column(updatable = false)
-    private Instant expenseDate;
+    private LocalDate expenseDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id",nullable = false)
+    private User user;
+
+
 
     public enum Category{
         FOOD,RENT,TRANSPORT,UTILITIES,ENTERTAINMENT,HEALTH,SHOPPING,OTHER
