@@ -9,7 +9,12 @@ import com.sagun.expense_tracker_api.principal.UserPrincipal;
 import com.sagun.expense_tracker_api.repository.ExpenseRepository;
 import com.sagun.expense_tracker_api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.YearMonth;
 
 @Service
 @RequiredArgsConstructor
@@ -24,5 +29,15 @@ public class ExpenseService {
         Expense expense1 = expenseRepository.save(expense);
         return ExpenseResponseDto.from(expense1);
     }
+
+    public Page<ExpenseResponseDto> getExpensesByMonthAndYear(UserPrincipal principals,int month, int year, Pageable pageable){
+        YearMonth yearMonth = YearMonth.of(year, month);
+        LocalDate startOfMonth = yearMonth.atDay(1);
+        LocalDate endOfMonth = yearMonth.atEndOfMonth();
+        return expenseRepository.findByUserIdAndExpenseDateBetween(principals.getId(), startOfMonth,endOfMonth,pageable).map(
+                ExpenseResponseDto::from
+        );
+    }
+
 
 }

@@ -6,11 +6,10 @@ import com.sagun.expense_tracker_api.principal.UserPrincipal;
 import com.sagun.expense_tracker_api.service.ExpenseService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -22,5 +21,15 @@ public class ExpenseController {
     @PostMapping
     public ExpenseResponseDto createExpense(@Valid  @RequestBody ExpenseRequestDto dto, @AuthenticationPrincipal UserPrincipal principal){
         return service.addExpense(dto,principal);
+    }
+
+    @GetMapping
+    public Page<ExpenseResponseDto> getExpenses(
+            @AuthenticationPrincipal UserPrincipal principal,
+            @RequestParam int month,
+            @RequestParam int year,
+            Pageable pageable
+    ){
+        return service.getExpensesByMonthAndYear(principal,month,year,pageable);
     }
 }
