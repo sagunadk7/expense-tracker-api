@@ -14,20 +14,29 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(
-        name = "users"
+        name = "users",
+        uniqueConstraints = {@UniqueConstraint(name = "uk_users_email",columnNames = "email"),
+        @UniqueConstraint(name = "uk_users_username",columnNames = "username")}
+
+
 )
 @NoArgsConstructor
 public class User extends BaseEntity {
 
-    @Column(nullable = false, name = "username",length = 100)
+    @Column(nullable = false, name = "username",length = 100,unique = true)
     private String username;
 
-    @Column(nullable = false)
+    @Column(nullable = false,unique = true)
     private String email;
 
     @Column(nullable = false)
     private String passwordHash;
 
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(
+            name ="user_roles",
+            joinColumns = @JoinColumn(name = "user_id")
+    )
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Set<Role> roles = Set.of(Role.USER);

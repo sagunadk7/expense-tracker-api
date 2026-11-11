@@ -79,7 +79,7 @@ public class UserService {
     }
 
     public ResponseEntity<String> setIncome(Long amount, UserPrincipal principal){
-        User user = repository.findByEmail(principal.getEmail()).orElseThrow(() -> new UserNotFoundException("User doesnot exist"));
+        User user = repository.findByEmail(principal.getEmail()).orElseThrow(() -> new UserNotFoundException("User does not exist"));
         if(!(amount >0)){
             return ResponseEntity.badRequest().body("Invalid income");
         }
@@ -87,6 +87,16 @@ public class UserService {
         repository.save(user);
         return ResponseEntity.ok().body("Income successfully set");
 
+    }
+
+    public ResponseEntity<String> deactivate(UserPrincipal principal){
+        User user = repository.findByEmail(principal.getEmail()).orElseThrow(() -> new UserNotFoundException("User does not exists"));
+        if(!user.isEnabled()){
+            return ResponseEntity.ok().body("Account is already de active ");
+        }
+        user.setEnabled(false);
+        repository.save(user);
+        return ResponseEntity.ok().body("Account Successfully deactivated");
     }
 
 }
