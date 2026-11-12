@@ -32,7 +32,7 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String passwordHash;
 
-    @ElementCollection(fetch = FetchType.LAZY)
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(
             name ="user_roles",
             joinColumns = @JoinColumn(name = "user_id")
