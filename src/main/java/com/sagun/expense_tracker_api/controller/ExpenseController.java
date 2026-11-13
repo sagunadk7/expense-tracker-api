@@ -3,6 +3,7 @@ package com.sagun.expense_tracker_api.controller;
 import com.sagun.expense_tracker_api.dto.ExpenseRequestDto;
 import com.sagun.expense_tracker_api.dto.ExpenseResponseDto;
 import com.sagun.expense_tracker_api.dto.MonthlyReportDTO;
+import com.sagun.expense_tracker_api.entity.Expense;
 import com.sagun.expense_tracker_api.principal.UserPrincipal;
 import com.sagun.expense_tracker_api.service.MonthlyReportService;
 import com.sagun.expense_tracker_api.service.ExpenseService;
@@ -12,6 +13,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -43,5 +47,10 @@ public class ExpenseController {
             @PathVariable int month
     ){
         return monthlyReportService.generateMonthlyReport(principal,year,month);
+    }
+
+    @GetMapping("/categories")
+    public List<Expense.Category> getCategories(){
+        return Arrays.stream(Expense.Category.values()).toList();
     }
 }
