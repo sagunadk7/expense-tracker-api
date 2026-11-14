@@ -89,14 +89,6 @@ public class UserService {
 
     }
 
-    public ResponseEntity<String> deactivate(UserPrincipal principal){
-        User user = repository.findByEmail(principal.getEmail()).orElseThrow(() -> new UserNotFoundException("User does not exists"));
-        if(!user.isEnabled()){
-            return ResponseEntity.ok().body("Account is already de active ");
-        }
-        user.setEnabled(false);
-        repository.save(user);
-        return ResponseEntity.ok().body("Account Successfully deactivated");
-    }
+
 
 }

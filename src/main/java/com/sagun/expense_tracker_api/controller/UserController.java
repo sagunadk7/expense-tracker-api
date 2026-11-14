@@ -37,9 +37,6 @@ public class UserController {
         return service.setIncome(income,userPrincipal);
     }
 
-    @PostMapping("/deactivate")
-    public ResponseEntity<String> deactivate(@AuthenticationPrincipal UserPrincipal principal){
-        return service.deactivate(principal);
-    }
+
 
 }

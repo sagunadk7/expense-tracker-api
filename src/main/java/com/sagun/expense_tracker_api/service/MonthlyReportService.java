@@ -65,7 +65,8 @@ public class MonthlyReportService {
                           2,
                           RoundingMode.HALF_UP
                   ).doubleValue();
-        return new MonthlyReportDTO(year,
+        return new MonthlyReportDTO(
+                year,
                 month,
                 totalExpense,
                 totalTransactions,
@@ -76,7 +77,7 @@ public class MonthlyReportService {
                 expenseDifference,
                 percentageChange,
                 categoryBreakdown,
-                dailyBreakdown);
+                dailyBreakdown
+        );
     }
-
 }
